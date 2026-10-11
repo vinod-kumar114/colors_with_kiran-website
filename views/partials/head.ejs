@@ -1,0 +1,82 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#3F5140">
+
+<title><%= title %></title>
+<meta name="description" content="<%= typeof metaDescription !== 'undefined' && metaDescription ? metaDescription : s['site.description'] %>">
+<meta name="keywords" content="<%= s['seo.keywords'] %>">
+<meta name="author" content="<%= s['site.name'] %>">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="<%= canonicalBase + currentPath %>">
+
+<!-- Local SEO -->
+<meta name="geo.region" content="PK-SD">
+<meta name="geo.placename" content="<%= s['contact.area'] %>, <%= s['contact.city'] %>">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="<%= s['site.name'] %>">
+<meta property="og:title" content="<%= title %>">
+<meta property="og:description" content="<%= typeof metaDescription !== 'undefined' && metaDescription ? metaDescription : s['site.description'] %>">
+<meta property="og:url" content="<%= canonicalBase + currentPath %>">
+<meta property="og:locale" content="en_PK">
+<% const ogImg = (typeof shareImage !== 'undefined' && shareImage) ? shareImage : s['home.hero_image']; %>
+<% if (ogImg) { %><meta property="og:image" content="<%= canonicalBase + ogImg %>"><% } %>
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="<%= title %>">
+<meta name="twitter:description" content="<%= typeof metaDescription !== 'undefined' && metaDescription ? metaDescription : s['site.description'] %>">
+<% if (ogImg) { %><meta name="twitter:image" content="<%= canonicalBase + ogImg %>"><% } %>
+
+<link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/img/favicon.svg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap">
+<link rel="stylesheet" href="/css/site.css">
+
+<!-- Structured data: local business -->
+<script type="application/ld+json">
+<%- JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": ["HealthAndBeautyBusiness", "LocalBusiness"],
+  "@id": canonicalBase + "/#business",
+  "name": s['site.name'],
+  "description": s['site.description'],
+  "slogan": s['site.tagline'],
+  "url": canonicalBase,
+  "image": ogImg ? canonicalBase + ogImg : undefined,
+  "telephone": s['contact.phone'],
+  "email": s['contact.email'],
+  "priceRange": "Rs. 800 – Rs. 25,000",
+  "currenciesAccepted": "PKR",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": s['contact.area'],
+    "addressLocality": s['contact.city'],
+    "addressRegion": s['contact.region'],
+    "addressCountry": "PK"
+  },
+  "areaServed": s['contact.service_area']
+    .split(',').map(a => ({ "@type": "Place", "name": a.trim() })).filter(a => a.name),
+  "knowsAbout": [
+    "Bridal Mehndi", "Shaadi Mehndi", "Arabic Mehndi", "Eid Mehndi",
+    "Chand Raat Mehndi", "Floral Mehndi", "Traditional Henna", "Minimal Mehndi"
+  ],
+  "sameAs": [s['contact.instagram'], s['contact.facebook']].filter(Boolean),
+  "openingHours": "Mo-Su 10:00-21:00",
+  "makesOffer": (typeof pricing !== 'undefined' && pricing ? pricing : []).slice(0, 10).map(p => ({
+    "@type": "Offer",
+    "itemOffered": { "@type": "Service", "name": p.service, "serviceType": "Mehndi application" },
+    "price": String(p.price_text || '').replace(/[^\d]/g, '') || undefined,
+    "priceCurrency": "PKR"
+  }))
+}, null, 0) %>
+</script>
+<% if (typeof extraSchema !== 'undefined' && extraSchema) { %>
+<script type="application/ld+json"><%- JSON.stringify(extraSchema) %></script>
+<% } %>
+
+<!-- Marks that JS is alive, so the reveal animations may hide content.
+     Without this class every section renders fully visible. -->
+<script>document.documentElement.classList.add('js');</script>

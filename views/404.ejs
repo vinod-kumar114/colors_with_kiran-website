@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><%- include('partials/head') %></head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<%- include('partials/sprite') %>
+<%- include('partials/header') %>
+
+<main id="main">
+  <section class="section" style="min-height:52vh;display:grid;place-items:center;text-align:center">
+    <div class="wrap" style="max-width:560px">
+      <span class="kicker">Oops</span>
+      <h1 style="font-size:clamp(2.4rem,9vw,4rem);margin:.6rem 0"><%= typeof message !== 'undefined' && message ? 'Something went wrong' : 'Page not found' %></h1>
+      <div class="flourish"><svg aria-hidden="true"><use href="#i-leaf"/></svg></div>
+      <p class="lede" style="margin-top:1.2rem">
+        <%= typeof message !== 'undefined' && message ? message : 'This page seems to have faded like old henna. Let us get you back to the designs.' %>
+      </p>
+      <div class="btn-row btn-row--center" style="margin-top:2rem">
+        <a class="btn btn--primary" href="/">Back to home</a>
+        <a class="btn btn--ghost" href="/portfolio">View portfolio</a>
+      </div>
+    </div>
+  </section>
+</main>
+<%- include('partials/footer') %>
+</body>
+</html>

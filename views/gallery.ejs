@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><%- include('partials/head') %></head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<%- include('partials/sprite') %>
+<%- include('partials/header') %>
+
+<main id="main">
+  <%- include('partials/pagehead', {
+    kicker: 'Gallery',
+    heading: 'Past work & archive',
+    text: 'Older designs from previous seasons — Eid sittings, mehndi nights and brides from across Hyderabad. Tap any photo to view it larger.'
+  }) %>
+
+  <div class="filter-bar">
+    <div class="wrap">
+      <div class="chips" aria-label="Filter gallery by category">
+        <button class="chip is-active" data-filter="all">All Photos <span class="chip__n"><%= designs.length %></span></button>
+        <% categories.filter(c => designs.some(d => d.category_slug === c.slug)).forEach(c => {
+             const n = designs.filter(d => d.category_slug === c.slug).length; %>
+          <button class="chip" data-filter="<%= c.slug %>">
+            <span aria-hidden="true"><%= c.emoji %></span> <%= c.name %> <span class="chip__n"><%= n %></span>
+          </button>
+        <% }) %>
+      </div>
+    </div>
+  </div>
+
+  <section class="section" style="padding-top:0">
+    <div class="wrap">
+      <% if (designs.length) { %>
+        <div class="masonry" id="designGrid">
+          <% designs.forEach((d, i) => { %>
+            <button class="masonry__item grid-item"
+                    data-category="<%= d.category_slug || 'uncategorised' %>"
+                    data-lightbox
+                    data-index="<%= i %>"
+                    data-title="<%= d.title %>"
+                    data-cat="<%= d.category_name || '' %>"
+                    data-price="<%= d.price_type === 'request' ? 'Price on Request' : d.price_label %>"
+                    data-desc="<%= d.caption || d.description || '' %>"
+                    data-date="<%= d.taken_on || '' %>"
+                    data-full="<%= d.image_url %>"
+                    data-url="<%= d.url %>"
+                    aria-label="View <%= d.title %> larger">
+              <img src="<%= d.thumb_url %>"
+                   alt="<%= d.title %> — <%= d.category_name || 'mehndi' %> henna design, Hyderabad"
+                   loading="<%= i < 6 ? 'eager' : 'lazy' %>" decoding="async"
+                   width="<%= d.width || 700 %>" height="<%= d.height || 875 %>">
+              <span class="masonry__cap">
+                <strong><%= d.title %></strong>
+                <span><%= d.category_name || '' %><%= d.taken_on ? ' · ' + d.taken_on : '' %></span>
+              </span>
+            </button>
+          <% }) %>
+        </div>
+        <p class="empty" id="noResults" hidden>
+          <svg aria-hidden="true"><use href="#i-image"/></svg> Nothing in this category yet.
+        </p>
+      <% } else { %>
+        <div class="empty">
+          <svg aria-hidden="true"><use href="#i-image"/></svg>
+          <p>The gallery is empty right now. Older designs will appear here as they are archived.</p>
+          <a class="btn btn--primary btn--sm" style="margin-top:1rem" href="/portfolio">Browse the portfolio instead</a>
+        </div>
+      <% } %>
+    </div>
+  </section>
+</main>
+<%- include('partials/footer') %>
+</body>
+</html>

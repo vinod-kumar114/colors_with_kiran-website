@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title><%= title %></title>
+<link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@300;400;500;600&display=swap">
+<link rel="stylesheet" href="/css/site.css">
+<style>
+  body { display: grid; place-items: center; min-height: 100vh; padding: 1.2rem;
+         background: linear-gradient(150deg, #2C3B2E, #3F5140 45%, #5A2C12); }
+  .login { width: 100%; max-width: 400px; background: var(--cream);
+           border-radius: var(--r-lg); padding: clamp(1.6rem, 5vw, 2.4rem);
+           box-shadow: 0 30px 70px rgba(0,0,0,.35); }
+  .login__mark { width: 52px; height: 52px; margin: 0 auto .9rem; color: var(--henna); }
+  .login h1 { font-size: 1.7rem; text-align: center; }
+  .login p.sub { text-align: center; font-size: .85rem; color: var(--ink-faint); margin-bottom: 1.6rem; }
+  .login .back { display: block; text-align: center; margin-top: 1.3rem; font-size: .84rem; color: var(--ink-faint); }
+</style>
+</head>
+<body>
+  <main class="login">
+    <svg class="login__mark" viewBox="0 0 64 64" aria-hidden="true">
+      <g stroke="currentColor" fill="none" stroke-width="2.2" stroke-linecap="round">
+        <circle cx="32" cy="32" r="7"/><circle cx="32" cy="32" r="14.5" stroke-dasharray="2.5 5"/>
+        <path d="M32 17c3.6 3 3.6 8.4 0 11.4-3.6-3-3.6-8.4 0-11.4Z"/>
+        <path d="M47 32c-3 3.6-8.4 3.6-11.4 0 3-3.6 8.4-3.6 11.4 0Z"/>
+        <path d="M32 47c-3.6-3-3.6-8.4 0-11.4 3.6 3 3.6 8.4 0 11.4Z"/>
+        <path d="M17 32c3-3.6 8.4-3.6 11.4 0-3 3.6-8.4 3.6-11.4 0Z"/>
+      </g>
+      <circle cx="32" cy="32" r="3" fill="currentColor"/>
+    </svg>
+    <h1>Colors with Kiran</h1>
+    <p class="sub">Admin dashboard</p>
+
+    <% if (error) { %><div class="alert alert--error"><%= error %></div><% } %>
+
+    <form method="post" action="/admin/login">
+      <div class="field">
+        <label for="username">Username</label>
+        <input id="username" name="username" type="text" required autocomplete="username" autocapitalize="none" autofocus>
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" required autocomplete="current-password">
+      </div>
+      <button class="btn btn--primary btn--block" type="submit" style="margin-top:.6rem;padding:.95rem">Sign in</button>
+    </form>
+
+    <a class="back" href="/">← Back to the website</a>
+  </main>
+</body>
+</html>

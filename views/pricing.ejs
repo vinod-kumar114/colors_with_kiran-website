@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><%- include('partials/head') %></head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<%- include('partials/sprite') %>
+<%- include('partials/header') %>
+
+<main id="main">
+  <%- include('partials/pagehead', {
+    kicker: 'Pricing',
+    heading: 'Mehndi rates in Hyderabad',
+    text: s['pricing.intro']
+  }) %>
+
+  <section class="section" style="padding-top:clamp(2rem,5vw,3rem)">
+    <div class="wrap" style="max-width:860px">
+      <div class="reveal">
+        <table class="price-table">
+          <caption><%= s['pricing.note'] %></caption>
+          <thead>
+            <tr><th scope="col">Service</th><th scope="col">Starting Price</th></tr>
+          </thead>
+          <tbody>
+            <% pricing.forEach(p => { %>
+              <tr>
+                <td class="svc"><%= p.service %><% if (p.note) { %><span class="note"><%= p.note %></span><% } %></td>
+                <td class="amt"><%= p.price_text %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="notice reveal">
+        <svg aria-hidden="true"><use href="#i-info"/></svg>
+        <span><strong>Please note:</strong> <%= s['pricing.note'] %> These are temporary starting prices and are reviewed each season.</span>
+      </div>
+
+      <div class="grid grid--2 reveal" style="margin-top:2.5rem;gap:1rem">
+        <div class="form-card" style="padding:1.3rem">
+          <h3 style="font-size:1.2rem">What affects the price?</h3>
+          <ul class="tick-list" style="margin-top:.9rem">
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>How much of the hand, arm or feet is covered</span></li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>Detail level — fine jaali work takes far longer</span></li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>Number of people in a group booking</span></li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>Travel outside <%= s['contact.area'] %></span></li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>Peak dates like Chand Raat and wedding season</span></li>
+          </ul>
+        </div>
+        <div class="form-card" style="padding:1.3rem">
+          <h3 style="font-size:1.2rem">Good to know</h3>
+          <ul class="tick-list" style="margin-top:.9rem">
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>Only fresh, natural, chemical-free henna</span></li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>Bridal bookings need an advance to hold the date</span></li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>Group and family discounts available</span></li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>Home service available across <%= s['contact.city'] %></span></li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>Exact quote confirmed on WhatsApp before booking</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tight cta-band">
+    <div class="wrap">
+      <h2>Want an exact quote?</h2>
+      <p>Send me a photo of the design you like along with your event date, and I will reply with a firm price.</p>
+      <div class="btn-row btn-row--center" style="margin-top:1.6rem">
+        <a class="btn btn--wa" href="<%= wa('I would like a price quote for my event.') %>" target="_blank" rel="noopener">
+          <svg aria-hidden="true"><use href="#i-wa"/></svg> Get a quote on WhatsApp
+        </a>
+        <a class="btn btn--light" href="/contact">Use the booking form</a>
+      </div>
+    </div>
+  </section>
+</main>
+<%- include('partials/footer') %>
+</body>
+</html>

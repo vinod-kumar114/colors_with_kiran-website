@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><%- include('partials/head') %></head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<%- include('partials/sprite') %>
+<%- include('partials/header') %>
+
+<main id="main">
+  <%- include('partials/pagehead', {
+    kicker: 'About',
+    heading: s['about.heading'],
+    text: s['about.subheading']
+  }) %>
+
+  <section class="section" style="padding-top:clamp(2rem,5vw,3rem)">
+    <div class="wrap split">
+      <div class="reveal">
+        <div class="portrait">
+          <% if (s['about.photo']) { %>
+            <img src="<%= s['about.photo'] %>" alt="<%= s['about.name'] %>, professional mehndi and henna artist in <%= s['contact.area'] %>, <%= s['contact.city'] %>" loading="eager" width="800" height="1000">
+          <% } %>
+          <div class="portrait__badge"><strong><%= s['about.experience'] %></strong><span>Experience</span></div>
+        </div>
+        <div class="contact-list" style="margin-top:1.6rem">
+          <div class="contact-item">
+            <span class="contact-item__ico"><svg aria-hidden="true"><use href="#i-pin"/></svg></span>
+            <span><strong>Based in</strong><span><%= s['about.location'] %></span></span>
+          </div>
+          <div class="contact-item">
+            <span class="contact-item__ico"><svg aria-hidden="true"><use href="#i-clock"/></svg></span>
+            <span><strong>Available</strong><span><%= s['contact.hours'] %></span></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <span class="kicker">My Story</span>
+        <h2 style="margin:.5rem 0 1.1rem">Hello, I am <%= s['about.name'] %></h2>
+        <div class="prose">
+          <% String(s['about.story']).split('\n').filter(p => p.trim()).forEach(para => { %>
+            <p><%= para %></p>
+          <% }) %>
+        </div>
+
+        <h3 style="margin-top:2.2rem">What I specialise in</h3>
+        <ul class="tick-list">
+          <% asList(s['about.specialties']).forEach(item => { %>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg><span><%= item %></span></li>
+          <% }) %>
+        </ul>
+
+        <h3 style="margin-top:2.2rem">Services I offer</h3>
+        <div class="tag-row">
+          <% asList(s['about.services']).forEach(item => { %>
+            <span class="tag"><%= item %></span>
+          <% }) %>
+        </div>
+
+        <div class="btn-row" style="margin-top:2rem">
+          <a class="btn btn--wa" href="<%= wa() %>" target="_blank" rel="noopener">
+            <svg aria-hidden="true"><use href="#i-wa"/></svg> Message me
+          </a>
+          <a class="btn btn--ghost" href="/portfolio">See my work</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tight section--cream">
+    <div class="wrap">
+      <div class="head">
+        <span class="kicker">Serving</span>
+        <h2 style="font-size:clamp(1.5rem,4vw,2.1rem)">Mehndi across Hyderabad</h2>
+      </div>
+      <div class="tag-row" style="justify-content:center">
+        <% s['contact.service_area'].split(',').map(a => a.trim()).filter(Boolean).forEach(area => { %>
+          <span class="tag" style="background:#fff"><%= area %></span>
+        <% }) %>
+      </div>
+    </div>
+  </section>
+</main>
+<%- include('partials/footer') %>
+</body>
+</html>

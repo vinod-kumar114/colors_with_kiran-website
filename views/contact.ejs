@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><%- include('partials/head') %></head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<%- include('partials/sprite') %>
+<%- include('partials/header') %>
+
+<main id="main">
+  <%- include('partials/pagehead', {
+    kicker: 'Contact & Booking',
+    heading: 'Book Your Mehndi Appointment',
+    text: 'The fastest way to reach me is WhatsApp. Or fill the form below and I will get back to you the same day, inshaAllah.'
+  }) %>
+
+  <section class="section" style="padding-top:clamp(2rem,5vw,3rem)">
+    <div class="wrap split" style="align-items:start">
+
+      <!-- ------------------------------------------------ contact rail -->
+      <div class="reveal">
+        <a class="btn btn--wa btn--block" href="<%= wa() %>" target="_blank" rel="noopener" style="margin-bottom:1.3rem;padding:1.05rem">
+          <svg aria-hidden="true"><use href="#i-wa"/></svg> Chat on WhatsApp now
+        </a>
+
+        <div class="contact-list">
+          <a class="contact-item" href="tel:<%= s['contact.phone'].replace(/\s/g,'') %>">
+            <span class="contact-item__ico"><svg aria-hidden="true"><use href="#i-phone"/></svg></span>
+            <span><strong>Phone</strong><span><%= s['contact.phone'] %></span></span>
+          </a>
+          <a class="contact-item" href="<%= wa() %>" target="_blank" rel="noopener">
+            <span class="contact-item__ico contact-item__ico--wa"><svg aria-hidden="true"><use href="#i-wa"/></svg></span>
+            <span><strong>WhatsApp</strong><span><%= s['contact.whatsapp'] %></span></span>
+          </a>
+          <% if (s['contact.email']) { %>
+          <a class="contact-item" href="mailto:<%= s['contact.email'] %>">
+            <span class="contact-item__ico"><svg aria-hidden="true"><use href="#i-mail"/></svg></span>
+            <span><strong>Email</strong><span><%= s['contact.email'] %></span></span>
+          </a>
+          <% } %>
+          <% if (s['contact.instagram']) { %>
+          <a class="contact-item" href="<%= s['contact.instagram'] %>" target="_blank" rel="noopener">
+            <span class="contact-item__ico"><svg aria-hidden="true"><use href="#i-ig"/></svg></span>
+            <span><strong>Instagram</strong><span><%= s['contact.instagram'].replace(/^https?:\/\/(www\.)?/, '') %></span></span>
+          </a>
+          <% } %>
+          <% if (s['contact.facebook']) { %>
+          <a class="contact-item" href="<%= s['contact.facebook'] %>" target="_blank" rel="noopener">
+            <span class="contact-item__ico"><svg aria-hidden="true"><use href="#i-fb"/></svg></span>
+            <span><strong>Facebook</strong><span><%= s['contact.facebook'].replace(/^https?:\/\/(www\.)?/, '') %></span></span>
+          </a>
+          <% } %>
+          <div class="contact-item">
+            <span class="contact-item__ico"><svg aria-hidden="true"><use href="#i-pin"/></svg></span>
+            <span><strong>Studio</strong><span><%= s['contact.address'] %></span></span>
+          </div>
+          <div class="contact-item">
+            <span class="contact-item__ico"><svg aria-hidden="true"><use href="#i-clock"/></svg></span>
+            <span><strong>Hours</strong><span><%= s['contact.hours'] %></span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ------------------------------------------------ booking form -->
+      <div class="reveal">
+        <% if (sent) { %>
+          <div class="form-card success-card">
+            <div class="success-card__icon"><svg aria-hidden="true"><use href="#i-check"/></svg></div>
+            <h2 style="font-size:clamp(1.6rem,4vw,2.2rem)">Jazak Allah, <%= clientName %>!</h2>
+            <p class="lede" style="margin-top:.8rem;max-width:44ch;margin-inline:auto">
+              Your booking request has reached me. I will review your date and reply on WhatsApp or by phone, usually within a few hours.
+            </p>
+            <div class="btn-row btn-row--center" style="margin-top:1.8rem">
+              <a class="btn btn--wa" href="<%= waFollowUp %>" target="_blank" rel="noopener">
+                <svg aria-hidden="true"><use href="#i-wa"/></svg> Send the details on WhatsApp too
+              </a>
+              <a class="btn btn--ghost" href="/portfolio">Browse more designs</a>
+            </div>
+            <p style="margin-top:1.6rem;font-size:.84rem;color:var(--ink-faint)">
+              For urgent or same-week bookings, WhatsApp is always fastest.
+            </p>
+          </div>
+        <% } else { %>
+          <form class="form-card" method="post" action="/contact" novalidate>
+            <h2 style="font-size:clamp(1.5rem,4vw,2rem);margin-bottom:.4rem">Booking request</h2>
+            <p style="font-size:.88rem;color:var(--ink-faint);margin-bottom:1.5rem">
+              Fields marked <span class="req" style="color:var(--maroon)">*</span> are required. Everything else helps me quote accurately.
+            </p>
+
+            <% if (typeof error !== 'undefined' && error) { %>
+              <div class="alert alert--error"><%= error %></div>
+            <% } %>
+
+            <!-- honeypot -->
+            <div class="hp" aria-hidden="true">
+              <label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label for="name">Your name <span class="req">*</span></label>
+                <input id="name" name="name" type="text" required autocomplete="name" placeholder="e.g. Ayesha Khan" value="<%= prefill.name || '' %>">
+              </div>
+              <div class="field">
+                <label for="phone">Phone number <span class="req">*</span></label>
+                <input id="phone" name="phone" type="tel" required autocomplete="tel" inputmode="tel" placeholder="03xx xxxxxxx" value="<%= prefill.phone || '' %>">
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label for="whatsapp">WhatsApp number</label>
+                <input id="whatsapp" name="whatsapp" type="tel" inputmode="tel" placeholder="Same as phone if blank" value="<%= prefill.whatsapp || '' %>">
+              </div>
+              <div class="field">
+                <label for="event_type">Event type</label>
+                <select id="event_type" name="event_type">
+                  <option value="">Select an event…</option>
+                  <% ['Wedding / Shaadi','Bridal (the bride herself)','Mayun / Dholki','Engagement','Eid','Chand Raat','Birthday / Party','Corporate / Event','Just for fun','Other'].forEach(o => { %>
+                    <option value="<%= o %>" <%= prefill.event_type === o ? 'selected' : '' %>><%= o %></option>
+                  <% }) %>
+                </select>
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label for="preferred_date">Preferred date</label>
+                <input id="preferred_date" name="preferred_date" type="date" value="<%= prefill.preferred_date || '' %>">
+              </div>
+              <div class="field">
+                <label for="preferred_time">Preferred time</label>
+                <input id="preferred_time" name="preferred_time" type="time" value="<%= prefill.preferred_time || '' %>">
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="location">Location / area</label>
+              <input id="location" name="location" type="text" placeholder="e.g. Qasimabad, or my studio" value="<%= prefill.location || '' %>">
+              <span class="field__hint">Tell me if you need me to travel to you.</span>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label for="category">Mehndi category / design</label>
+                <input id="category" name="category" type="text" list="catList" placeholder="e.g. Bridal Mehndi" value="<%= prefill.category || '' %>">
+                <datalist id="catList">
+                  <% categories.forEach(c => { %><option value="<%= c.name %>"></option><% }) %>
+                </datalist>
+              </div>
+              <div class="field">
+                <label for="people_count">Number of people</label>
+                <input id="people_count" name="people_count" type="number" min="1" max="200" inputmode="numeric" placeholder="e.g. 4" value="<%= prefill.people_count || '' %>">
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="message">Additional message</label>
+              <textarea id="message" name="message" placeholder="Anything else I should know — design references, timings, how many hands, etc."><%= prefill.message || '' %></textarea>
+            </div>
+
+            <button class="btn btn--primary btn--block" type="submit" style="margin-top:.5rem;padding:1rem">
+              Send booking request <svg aria-hidden="true"><use href="#i-arrow"/></svg>
+            </button>
+
+            <p style="margin-top:1rem;font-size:.8rem;color:var(--ink-faint);text-align:center">
+              Your details are only used to contact you about this booking.
+            </p>
+          </form>
+        <% } %>
+      </div>
+    </div>
+  </section>
+</main>
+<%- include('partials/footer') %>
+</body>
+</html>

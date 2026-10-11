@@ -1,0 +1,26 @@
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Design preview" hidden>
+  <span class="lb-count" id="lbCount"></span>
+  <button class="lb-btn lb-close" id="lbClose" aria-label="Close"><svg aria-hidden="true"><use href="#i-x"/></svg></button>
+  <button class="lb-btn lb-prev"  id="lbPrev"  aria-label="Previous design"><svg aria-hidden="true"><use href="#i-left"/></svg></button>
+  <button class="lb-btn lb-next"  id="lbNext"  aria-label="Next design"><svg aria-hidden="true"><use href="#i-right"/></svg></button>
+
+  <div class="lightbox__stage">
+    <img class="lightbox__img" id="lbImg" src="" alt="">
+    <div class="lightbox__info">
+      <h3 id="lbTitle"></h3>
+      <div class="lightbox__meta">
+        <span id="lbCat"></span>
+        <span class="price" id="lbPrice"></span>
+        <span id="lbDate"></span>
+      </div>
+      <p class="lightbox__desc" id="lbDesc"></p>
+      <div class="lightbox__actions">
+        <a class="btn btn--wa btn--sm" id="lbBook" href="#" target="_blank" rel="noopener">
+          <svg aria-hidden="true"><use href="#i-wa"/></svg> Book This Design
+        </a>
+        <a class="btn btn--light btn--sm" id="lbMore" href="#">View details</a>
+      </div>
+    </div>
+  </div>
+</div>
+<script id="waBase" type="application/json"><%- JSON.stringify({ base: wa() }) %></script>

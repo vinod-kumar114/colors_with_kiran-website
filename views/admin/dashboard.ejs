@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title><%= title %></title>
+<link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@300;400;500;600&display=swap">
+<link rel="stylesheet" href="/css/site.css">
+<link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+<%- include('../partials/sprite') %>
+
+<div class="admin">
+  <!-- ========================================================== SIDEBAR -->
+  <aside class="side">
+    <div class="side__brand">
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <g stroke="currentColor" fill="none" stroke-width="2.4" stroke-linecap="round">
+          <circle cx="32" cy="32" r="7"/><circle cx="32" cy="32" r="14.5" stroke-dasharray="2.5 5"/>
+          <path d="M32 17c3.6 3 3.6 8.4 0 11.4-3.6-3-3.6-8.4 0-11.4Z"/>
+          <path d="M47 32c-3 3.6-8.4 3.6-11.4 0 3-3.6 8.4-3.6 11.4 0Z"/>
+          <path d="M32 47c-3.6-3-3.6-8.4 0-11.4 3.6 3 3.6 8.4 0 11.4Z"/>
+          <path d="M17 32c3-3.6 8.4-3.6 11.4 0-3 3.6-8.4 3.6-11.4 0Z"/>
+        </g>
+        <circle cx="32" cy="32" r="3" fill="currentColor"/>
+      </svg>
+      <div><b>Colors with Kiran</b><span>Dashboard</span></div>
+    </div>
+
+    <nav class="side__nav" id="sideNav" aria-label="Dashboard sections">
+      <button class="side__link is-active" data-panel="dashboard"><svg><use href="#i-sparkle"/></svg> Dashboard</button>
+      <button class="side__link" data-panel="portfolio"><svg><use href="#i-image"/></svg> Portfolio</button>
+      <button class="side__link" data-panel="gallery"><svg><use href="#i-image"/></svg> Gallery</button>
+      <button class="side__link" data-panel="categories"><svg><use href="#i-leaf"/></svg> Categories</button>
+      <button class="side__link" data-panel="pricing"><svg><use href="#i-star"/></svg> Pricing</button>
+      <button class="side__link" data-panel="testimonials"><svg><use href="#i-star"/></svg> Testimonials</button>
+      <button class="side__link" data-panel="bookings"><svg><use href="#i-wa"/></svg> Bookings <span class="pill" id="navNew" hidden>0</span></button>
+      <button class="side__link" data-panel="homepage"><svg><use href="#i-sparkle"/></svg> Homepage</button>
+      <button class="side__link" data-panel="about"><svg><use href="#i-info"/></svg> About</button>
+      <button class="side__link" data-panel="contact"><svg><use href="#i-phone"/></svg> Contact Info</button>
+      <button class="side__link" data-panel="settings"><svg><use href="#i-info"/></svg> Settings</button>
+      <button class="side__link" data-panel="trash"><svg><use href="#i-x"/></svg> Trash <span class="pill" id="navTrash" hidden>0</span></button>
+    </nav>
+
+    <div class="side__foot">
+      <a href="/" target="_blank" rel="noopener">↗ View website</a>
+      <form method="post" action="/admin/logout"><button class="side__link" type="submit" style="color:rgba(239,233,222,.66)">⏻ Sign out</button></form>
+    </div>
+  </aside>
+
+  <!-- ============================================================= MAIN -->
+  <main class="main">
+    <div id="pwWarn" class="warn-strip" hidden>
+      <svg><use href="#i-info"/></svg>
+      <span>You are still using the default password. Please change it to keep your dashboard safe.</span>
+      <button class="mini mini--gold" data-goto="settings">Change now</button>
+    </div>
+
+    <!-- ------------------------------------------------------ dashboard -->
+    <section class="panel is-active" id="p-dashboard">
+      <div class="panel__head">
+        <div>
+          <h1>Assalam-o-Alaikum, <%= user.username %></h1>
+          <p>Here is how your website is looking today. Everything on your public site can be changed from this dashboard — no coding needed.</p>
+        </div>
+        <a class="btn btn--ghost btn--sm" href="/" target="_blank" rel="noopener">View website ↗</a>
+      </div>
+
+      <div class="stats" id="statCards"></div>
+
+      <div class="box" style="margin-top:1.2rem">
+        <h2>Quick actions</h2>
+        <p class="hint">The things you will do most often.</p>
+        <div class="toolbar">
+          <button class="btn btn--primary btn--sm" data-new-design>+ Add a new design</button>
+          <button class="btn btn--ghost btn--sm" data-goto="bookings">See booking requests</button>
+          <button class="btn btn--ghost btn--sm" data-goto="pricing">Update prices</button>
+          <button class="btn btn--ghost btn--sm" data-goto="homepage">Edit announcement banner</button>
+        </div>
+      </div>
+
+      <div class="box">
+        <h2>Recent booking requests</h2>
+        <p class="hint">The five most recent enquiries from your website form.</p>
+        <div class="rows" id="recentInq"></div>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------ portfolio -->
+    <section class="panel" id="p-portfolio">
+      <div class="panel__head">
+        <div>
+          <h1>Portfolio</h1>
+          <p>These designs appear on your Portfolio page. Star one as <b>Featured</b> to show it on the homepage.</p>
+        </div>
+        <button class="btn btn--primary btn--sm" data-new-design>+ Add design</button>
+      </div>
+      <div class="toolbar">
+        <input type="search" id="searchPortfolio" placeholder="Search designs by name…" aria-label="Search portfolio">
+      </div>
+      <div class="rows" id="listPortfolio"></div>
+    </section>
+
+    <!-- -------------------------------------------------------- gallery -->
+    <section class="panel" id="p-gallery">
+      <div class="panel__head">
+        <div>
+          <h1>Gallery</h1>
+          <p>Your archive of older work. Nothing here is deleted — use <b>Move to Portfolio</b> any time you want to bring a design back to the front.</p>
+        </div>
+        <button class="btn btn--primary btn--sm" data-new-design data-placement="gallery">+ Add to gallery</button>
+      </div>
+      <div class="toolbar">
+        <input type="search" id="searchGallery" placeholder="Search gallery…" aria-label="Search gallery">
+      </div>
+      <div class="rows" id="listGallery"></div>
+    </section>
+
+    <!-- ----------------------------------------------------- categories -->
+    <section class="panel" id="p-categories">
+      <div class="panel__head">
+        <div>
+          <h1>Categories</h1>
+          <p>Add, rename, reorder or remove the styles you offer. Deleting a category never deletes your designs — they simply become uncategorised.</p>
+        </div>
+      </div>
+
+      <div class="box">
+        <h2>Add a category</h2>
+        <form id="formCategory" class="grid2">
+          <div class="field"><label for="catName">Category name</label>
+            <input id="catName" name="name" type="text" placeholder="e.g. Glitter Mehndi" required></div>
+          <div class="field"><label for="catEmoji">Emoji (optional)</label>
+            <input id="catEmoji" name="emoji" type="text" maxlength="4" placeholder="✨"></div>
+          <div class="field full"><label for="catDesc">Short description (optional)</label>
+            <input id="catDesc" name="description" type="text" placeholder="Shown on the categories page"></div>
+          <div class="full"><button class="btn btn--primary btn--sm" type="submit">Add category</button></div>
+        </form>
+      </div>
+
+      <div class="rows" id="listCategories"></div>
+    </section>
+
+    <!-- -------------------------------------------------------- pricing -->
+    <section class="panel" id="p-pricing">
+      <div class="panel__head">
+        <div>
+          <h1>Pricing</h1>
+          <p>Type prices exactly how you want them shown, e.g. <b>Rs. 1,500</b> or <b>Rs. 8,000+</b>. Turn a row off to hide it without deleting it.</p>
+        </div>
+      </div>
+
+      <div class="box">
+        <h2>Add a price row</h2>
+        <form id="formPricing" class="grid2">
+          <div class="field"><label for="prSvc">Service</label>
+            <input id="prSvc" name="service" type="text" placeholder="e.g. Glitter Mehndi" required></div>
+          <div class="field"><label for="prAmt">Starting price</label>
+            <input id="prAmt" name="price_text" type="text" placeholder="Rs. 2,500"></div>
+          <div class="field full"><label for="prNote">Note (optional)</label>
+            <input id="prNote" name="note" type="text" placeholder="Per hand · group discounts available"></div>
+          <div class="full"><button class="btn btn--primary btn--sm" type="submit">Add row</button></div>
+        </form>
+      </div>
+
+      <div class="rows" id="listPricing"></div>
+
+      <div class="box" style="margin-top:1.1rem">
+        <h2>Pricing notice</h2>
+        <p class="hint">This line appears under the price table on your website.</p>
+        <form id="formPricingNote">
+          <div class="field"><textarea name="pricing.note" rows="2"></textarea></div>
+          <div class="field"><label>Intro paragraph above the table</label><textarea name="pricing.intro" rows="3"></textarea></div>
+          <button class="btn btn--primary btn--sm" type="submit">Save</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- --------------------------------------------------- testimonials -->
+    <section class="panel" id="p-testimonials">
+      <div class="panel__head">
+        <div>
+          <h1>Testimonials</h1>
+          <p>Reviews from happy clients. Hidden reviews stay saved but do not show on the website.</p>
+        </div>
+        <button class="btn btn--primary btn--sm" data-new-testimonial>+ Add review</button>
+      </div>
+      <div class="rows" id="listTestimonials"></div>
+    </section>
+
+    <!-- ------------------------------------------------------- bookings -->
+    <section class="panel" id="p-bookings">
+      <div class="panel__head">
+        <div>
+          <h1>Bookings & enquiries</h1>
+          <p>Everything sent through your website booking form. Tap a phone number to call, or WhatsApp to reply instantly.</p>
+        </div>
+      </div>
+      <div class="toolbar">
+        <div class="seg" id="inqFilter">
+          <button class="is-active" data-status="all">All</button>
+          <button data-status="new">New</button>
+          <button data-status="read">Read</button>
+          <button data-status="booked">Booked</button>
+          <button data-status="archived">Archived</button>
+        </div>
+      </div>
+      <div class="rows" id="listInquiries"></div>
+    </section>
+
+    <!-- ------------------------------------------------------- homepage -->
+    <section class="panel" id="p-homepage">
+      <div class="panel__head"><div>
+        <h1>Homepage</h1>
+        <p>Your hero section, welcome text and the promotional banner that runs across the top of every page.</p>
+      </div></div>
+      <div class="box">
+        <h2>Announcement banner</h2>
+        <p class="hint">Great for "Eid Bookings Are Now Open!" or "Chand Raat Slots Available".</p>
+        <form id="formBanner"></form>
+      </div>
+      <div class="box">
+        <h2>Hero section</h2>
+        <p class="hint">The big image and headline at the top of your homepage.</p>
+        <form id="formHero"></form>
+      </div>
+      <div class="box">
+        <h2>Welcome text</h2>
+        <form id="formIntro"></form>
+      </div>
+    </section>
+
+    <!-- ---------------------------------------------------------- about -->
+    <section class="panel" id="p-about">
+      <div class="panel__head"><div>
+        <h1>About Kiran</h1>
+        <p>Your photo, your story and what you specialise in. Put each specialty and service on its own line.</p>
+      </div></div>
+      <div class="box"><form id="formAbout"></form></div>
+    </section>
+
+    <!-- -------------------------------------------------------- contact -->
+    <section class="panel" id="p-contact">
+      <div class="panel__head"><div>
+        <h1>Contact information</h1>
+        <p>Used everywhere on your site — the WhatsApp buttons, the footer, and your Google listing information.</p>
+      </div></div>
+      <div class="box"><form id="formContact"></form></div>
+    </section>
+
+    <!-- ------------------------------------------------------- settings -->
+    <section class="panel" id="p-settings">
+      <div class="panel__head"><div>
+        <h1>Website settings</h1>
+        <p>Your site name, tagline, search keywords and admin password.</p>
+      </div></div>
+      <div class="box"><h2>Basic information</h2><form id="formSite"></form></div>
+      <div class="box">
+        <h2>Change password</h2>
+        <p class="hint">You will be signed out and asked to sign in again with the new password.</p>
+        <form id="formPassword" class="grid2">
+          <div class="field"><label for="pw1">New password</label>
+            <input id="pw1" name="password" type="password" minlength="8" required autocomplete="new-password"></div>
+          <div class="field"><label for="pw2">Repeat new password</label>
+            <input id="pw2" name="confirm" type="password" minlength="8" required autocomplete="new-password"></div>
+          <div class="full"><button class="btn btn--primary btn--sm" type="submit">Change password</button></div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ---------------------------------------------------------- trash -->
+    <section class="panel" id="p-trash">
+      <div class="panel__head">
+        <div>
+          <h1>Trash</h1>
+          <p>Deleted designs are kept here so nothing is ever lost by accident. Restore any of them with one tap.</p>
+        </div>
+        <button class="btn btn--ghost btn--sm mini--danger" id="emptyTrash">Empty trash permanently</button>
+      </div>
+      <div class="rows" id="listTrash"></div>
+    </section>
+  </main>
+</div>
+
+<!-- ============================================================= MODALS -->
+<div class="modal" id="modalDesign" role="dialog" aria-modal="true" aria-labelledby="mdTitle">
+  <div class="modal__box">
+    <div class="modal__head">
+      <h2 id="mdTitle">Add a design</h2>
+      <button class="mini" data-close-modal aria-label="Close">✕</button>
+    </div>
+    <form id="formDesign">
+      <input type="hidden" name="id">
+      <label class="drop" id="dropDesign">
+        <input type="file" name="image" accept="image/jpeg,image/png,image/webp,image/avif,image/heic" hidden>
+        <svg><use href="#i-image"/></svg>
+        <b>Tap to choose a photo</b>
+        <span>JPG, PNG or WebP · up to <%= maxUploadMb %> MB · resized automatically</span>
+        <img id="dropPreview" hidden alt="">
+      </label>
+
+      <div class="grid2" style="margin-top:1.1rem">
+        <div class="field full"><label for="dTitle">Design name</label>
+          <input id="dTitle" name="title" type="text" required placeholder="e.g. Elegant Arabic Mehndi"></div>
+
+        <div class="field"><label for="dCat">Category</label>
+          <select id="dCat" name="category_id"></select></div>
+
+        <div class="field"><label for="dPlace">Show in</label>
+          <select id="dPlace" name="placement">
+            <option value="portfolio">Portfolio (main)</option>
+            <option value="gallery">Gallery (archive)</option>
+          </select></div>
+
+        <div class="field"><label for="dPType">Price type</label>
+          <select id="dPType" name="price_type">
+            <option value="starting">Starting from…</option>
+            <option value="fixed">Fixed price</option>
+            <option value="request">Price on request</option>
+          </select></div>
+
+        <div class="field" id="priceValueField"><label for="dPVal">Price (Rs.)</label>
+          <input id="dPVal" name="price_value" type="number" min="0" step="50" inputmode="numeric" placeholder="1500"></div>
+
+        <div class="field full"><label for="dDesc">Short description</label>
+          <textarea id="dDesc" name="description" rows="3" placeholder="What makes this design special, how long it takes, what occasion it suits…"></textarea></div>
+
+        <div class="field"><label for="dCaption">Gallery caption (optional)</label>
+          <input id="dCaption" name="caption" type="text" placeholder="Shown in the gallery lightbox"></div>
+
+        <div class="field"><label for="dDate">Date (optional)</label>
+          <input id="dDate" name="taken_on" type="date"></div>
+
+        <div class="full">
+          <label class="checkline"><input type="checkbox" name="is_featured" value="1"> Feature this design on the homepage</label>
+        </div>
+      </div>
+
+      <div class="toolbar" style="margin-top:1rem;margin-bottom:0">
+        <button class="btn btn--primary btn--sm" type="submit" id="saveDesign">Save design</button>
+        <button class="btn btn--ghost btn--sm" type="button" data-close-modal>Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal" id="modalTestimonial" role="dialog" aria-modal="true">
+  <div class="modal__box">
+    <div class="modal__head">
+      <h2 id="mtTitle">Add a review</h2>
+      <button class="mini" data-close-modal aria-label="Close">✕</button>
+    </div>
+    <form id="formTestimonial">
+      <input type="hidden" name="id">
+      <div class="grid2">
+        <div class="field"><label for="tName">Client name</label>
+          <input id="tName" name="name" type="text" required placeholder="e.g. Ayesha Siddiqui"></div>
+        <div class="field"><label for="tEvent">Event / service</label>
+          <input id="tEvent" name="event_type" type="text" placeholder="e.g. Bridal Mehndi"></div>
+        <div class="field full"><label for="tReview">Review</label>
+          <textarea id="tReview" name="review" rows="5" required placeholder="What did they say about your work?"></textarea></div>
+        <div class="field"><label for="tRating">Rating</label>
+          <select id="tRating" name="rating">
+            <option value="5">★★★★★ (5)</option><option value="4">★★★★ (4)</option>
+            <option value="3">★★★ (3)</option><option value="2">★★ (2)</option><option value="1">★ (1)</option>
+          </select></div>
+        <div class="field"><label for="tPhoto">Photo (optional)</label>
+          <input id="tPhoto" name="photo" type="file" accept="image/*"></div>
+        <div class="full"><label class="checkline"><input type="checkbox" name="is_visible" value="1" checked> Show on the website</label></div>
+      </div>
+      <div class="toolbar" style="margin-top:1rem;margin-bottom:0">
+        <button class="btn btn--primary btn--sm" type="submit">Save review</button>
+        <button class="btn btn--ghost btn--sm" type="button" data-close-modal>Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal" id="modalCategory" role="dialog" aria-modal="true">
+  <div class="modal__box" style="max-width:480px">
+    <div class="modal__head"><h2>Edit category</h2><button class="mini" data-close-modal aria-label="Close">✕</button></div>
+    <form id="formCategoryEdit">
+      <input type="hidden" name="id">
+      <div class="field"><label for="ceName">Name</label><input id="ceName" name="name" type="text" required></div>
+      <div class="field"><label for="ceEmoji">Emoji</label><input id="ceEmoji" name="emoji" type="text" maxlength="4"></div>
+      <div class="field"><label for="ceDesc">Description</label><input id="ceDesc" name="description" type="text"></div>
+      <div class="toolbar" style="margin-bottom:0">
+        <button class="btn btn--primary btn--sm" type="submit">Save</button>
+        <button class="btn btn--ghost btn--sm" type="button" data-close-modal>Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toasts"></div>
+<script src="/js/admin.js" defer></script>
+</body>
+</html>

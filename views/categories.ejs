@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><%- include('partials/head') %></head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<%- include('partials/sprite') %>
+<%- include('partials/header') %>
+
+<main id="main">
+  <%- include('partials/pagehead', {
+    kicker: 'Design Categories',
+    heading: 'Find your style',
+    text: 'From a twenty-minute Eid design to a full bridal set — pick the style closest to what you have in mind.'
+  }) %>
+
+  <section class="section" style="padding-top:clamp(2rem,5vw,3rem)">
+    <div class="wrap">
+      <div class="grid grid--auto">
+        <% cats.forEach(c => { %>
+          <a class="cat-card reveal <%= c.cover ? '' : 'cat-card--empty' %>" href="/portfolio?category=<%= c.slug %>">
+            <% if (c.cover) { %>
+              <img src="<%= c.cover.thumb_url %>" alt="<%= c.name %> designs by Colors with Kiran, Hyderabad" loading="lazy" width="700" height="875">
+            <% } %>
+            <div class="cat-card__veil"></div>
+            <div class="cat-card__body">
+              <div class="cat-card__emoji"><%= c.emoji %></div>
+              <div class="cat-card__name"><%= c.name %></div>
+              <div class="cat-card__n"><%= c.design_count %> design<%= c.design_count === 1 ? '' : 's' %></div>
+            </div>
+          </a>
+        <% }) %>
+      </div>
+
+      <div class="notice" style="margin-top:2.5rem">
+        <svg aria-hidden="true"><use href="#i-info"/></svg>
+        <span>Do not see your style? I take <strong>custom designs</strong> too — send me a reference photo on WhatsApp and I will recreate it.</span>
+      </div>
+    </div>
+  </section>
+</main>
+<%- include('partials/footer') %>
+</body>
+</html>

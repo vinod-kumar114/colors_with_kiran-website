@@ -1,0 +1,29 @@
+<%
+  const bookMsg = `I am interested in the "${d.title}" design${d.category_name ? ' (' + d.category_name + ')' : ''}.`;
+%>
+<article class="card" data-category="<%= d.category_slug || 'uncategorised' %>">
+  <a class="card__media" href="<%= d.url %>" aria-label="<%= d.title %>">
+    <% if (d.category_name) { %><span class="card__tag"><%= d.category_name %></span><% } %>
+    <% if (d.is_featured) { %><span class="card__star" title="Featured design"><svg aria-hidden="true"><use href="#i-star"/></svg></span><% } %>
+    <img src="<%= d.thumb_url %>"
+         alt="<%= d.title %> — <%= d.category_name || 'mehndi' %> design by Colors with Kiran, Qasimabad Hyderabad"
+         loading="<%= typeof eager !== 'undefined' && eager ? 'eager' : 'lazy' %>"
+         decoding="async"
+         width="<%= d.width || 700 %>" height="<%= d.height || 875 %>">
+  </a>
+  <div class="card__body">
+    <h3 class="card__title"><a href="<%= d.url %>"><%= d.title %></a></h3>
+    <% if (d.description) { %><p class="card__desc"><%= d.description %></p><% } %>
+    <div class="card__foot">
+      <span class="price <%= d.price_type === 'request' ? 'price--request' : '' %>">
+        <% if (d.price_type === 'request') { %>
+          On Request
+        <% } else { %>
+          <%= d.price_label.replace('From ', '') %>
+          <% if (d.price_type === 'starting') { %><small>Starting from</small><% } %>
+        <% } %>
+      </span>
+      <a class="btn btn--gold btn--sm" href="<%= wa(bookMsg) %>" target="_blank" rel="noopener">Book</a>
+    </div>
+  </div>
+</article>

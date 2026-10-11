@@ -1,0 +1,87 @@
+<% const NAV = [
+  ['/', 'Home'],
+  ['/portfolio', 'Portfolio'],
+  ['/categories', 'Categories'],
+  ['/gallery', 'Gallery'],
+  ['/pricing', 'Pricing'],
+  ['/about', 'About Kiran'],
+  ['/contact', 'Contact'],
+]; %>
+
+<% if (bannerOn) { %>
+<div class="banner">
+  <a href="<%= s['banner.link'] || '/contact' %>">
+    <span class="banner__dot"></span>
+    <span><%= s['banner.text'] %></span>
+    <svg width="14" height="14" aria-hidden="true"><use href="#i-arrow"/></svg>
+  </a>
+</div>
+<% } %>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="/" aria-label="<%= s['site.name'] %> — home">
+      <svg class="brand__mark" viewBox="0 0 64 64" aria-hidden="true">
+        <g stroke="currentColor" fill="none" stroke-width="2.2" stroke-linecap="round">
+          <circle cx="32" cy="32" r="7"/>
+          <circle cx="32" cy="32" r="14.5" stroke-dasharray="2.5 5"/>
+          <path d="M32 17c3.6 3 3.6 8.4 0 11.4-3.6-3-3.6-8.4 0-11.4Z"/>
+          <path d="M47 32c-3 3.6-8.4 3.6-11.4 0 3-3.6 8.4-3.6 11.4 0Z"/>
+          <path d="M32 47c-3.6-3-3.6-8.4 0-11.4 3.6 3 3.6 8.4 0 11.4Z"/>
+          <path d="M17 32c3-3.6 8.4-3.6 11.4 0-3 3.6-8.4 3.6-11.4 0Z"/>
+        </g>
+        <circle cx="32" cy="32" r="3" fill="currentColor"/>
+      </svg>
+      <span class="brand__text">
+        <span class="brand__name">Colors with Kiran</span>
+        <span class="brand__sub">Mehndi Artist · Hyderabad</span>
+      </span>
+    </a>
+
+    <nav class="nav" aria-label="Main">
+      <% NAV.forEach(([href, label]) => { %>
+        <a href="<%= href %>" <%= (href === '/' ? currentPath === '/' : currentPath.startsWith(href)) ? 'aria-current="page"' : '' %>><%= label %></a>
+      <% }) %>
+    </nav>
+
+    <a class="btn btn--primary btn--sm header-cta" href="<%= wa() %>" target="_blank" rel="noopener">
+      <svg aria-hidden="true"><use href="#i-wa"/></svg> Book Now
+    </a>
+
+    <button class="burger" id="burger" aria-expanded="false" aria-controls="mobileNav" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<div class="mobile-nav" id="mobileNav" aria-hidden="true">
+  <div class="mobile-nav__top">
+    <a class="brand" href="/">
+      <span class="brand__text">
+        <span class="brand__name">Colors with Kiran</span>
+        <span class="brand__sub">Mehndi Artist · Hyderabad</span>
+      </span>
+    </a>
+    <button class="burger" id="burgerClose" aria-expanded="true" aria-label="Close menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <nav class="mobile-nav__links" aria-label="Mobile">
+    <% NAV.forEach(([href, label], i) => { %>
+      <a href="<%= href %>" <%= (href === '/' ? currentPath === '/' : currentPath.startsWith(href)) ? 'aria-current="page"' : '' %>>
+        <%= label %><span><%= String(i + 1).padStart(2, '0') %></span>
+      </a>
+    <% }) %>
+  </nav>
+
+  <div class="mobile-nav__cta">
+    <a class="btn btn--wa btn--block" href="<%= wa() %>" target="_blank" rel="noopener">
+      <svg aria-hidden="true"><use href="#i-wa"/></svg> WhatsApp Kiran
+    </a>
+    <a class="btn btn--ghost btn--block" href="tel:<%= s['contact.phone'].replace(/\s/g,'') %>">
+      <svg aria-hidden="true"><use href="#i-phone"/></svg> <%= s['contact.phone'] %>
+    </a>
+    <p class="mobile-nav__meta"><%= s['contact.area'] %>, <%= s['contact.city'] %> · <%= s['contact.hours'] %></p>
+  </div>
+</div>

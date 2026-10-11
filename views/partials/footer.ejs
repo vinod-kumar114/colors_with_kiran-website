@@ -1,0 +1,51 @@
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <span class="brand__name" style="font-family:var(--serif);font-size:1.4rem;">Colors with Kiran</span>
+        <p style="margin-top:.7rem;max-width:38ch;"><%= s['site.tagline'] %>. Freehand bridal, festive and everyday mehndi in <%= s['contact.area'] %>, <%= s['contact.city'] %>.</p>
+        <div class="socials">
+          <a href="<%= wa() %>" target="_blank" rel="noopener" aria-label="WhatsApp"><svg aria-hidden="true"><use href="#i-wa"/></svg></a>
+          <% if (s['contact.instagram']) { %><a href="<%= s['contact.instagram'] %>" target="_blank" rel="noopener" aria-label="Instagram"><svg aria-hidden="true"><use href="#i-ig"/></svg></a><% } %>
+          <% if (s['contact.facebook']) { %><a href="<%= s['contact.facebook'] %>" target="_blank" rel="noopener" aria-label="Facebook"><svg aria-hidden="true"><use href="#i-fb"/></svg></a><% } %>
+          <% if (s['contact.email']) { %><a href="mailto:<%= s['contact.email'] %>" aria-label="Email"><svg aria-hidden="true"><use href="#i-mail"/></svg></a><% } %>
+        </div>
+      </div>
+
+      <div>
+        <h4>Explore</h4>
+        <ul class="footer-links">
+          <li><a href="/portfolio">Portfolio</a></li>
+          <li><a href="/categories">Categories</a></li>
+          <li><a href="/gallery">Gallery</a></li>
+          <li><a href="/pricing">Pricing</a></li>
+          <li><a href="/about">About Kiran</a></li>
+          <li><a href="/contact">Book an Appointment</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Get in touch</h4>
+        <ul class="footer-links">
+          <li><a href="tel:<%= s['contact.phone'].replace(/\s/g,'') %>"><%= s['contact.phone'] %></a></li>
+          <% if (s['contact.email']) { %><li><a href="mailto:<%= s['contact.email'] %>"><%= s['contact.email'] %></a></li><% } %>
+          <li><%= s['contact.address'] %></li>
+          <li><%= s['contact.hours'] %></li>
+        </ul>
+        <p style="margin-top:1rem;font-size:.82rem;opacity:.75;">Serving <%= s['contact.service_area'] %>.</p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© <%= new Date().getFullYear() %> <%= s['site.name'] %>. All rights reserved.</span>
+      <span>Mehndi artist in Qasimabad, Hyderabad, Sindh · <a href="/admin" style="opacity:.6">Admin</a></span>
+    </div>
+  </div>
+</footer>
+
+<a class="fab" href="<%= wa() %>" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+  <svg aria-hidden="true"><use href="#i-wa"/></svg><span>Book on WhatsApp</span>
+</a>
+
+<%- include('lightbox') %>
+<script src="/js/site.js" defer></script>

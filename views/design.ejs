@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<%
+  const shareImage = design.image_url;
+  const extraSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": design.title,
+    "image": canonicalBase + design.image_url,
+    "description": design.description || design.title,
+    "category": design.category_name || 'Mehndi',
+    "brand": { "@type": "Brand", "name": s['site.name'] },
+    "offers": design.price_type === 'request' ? undefined : {
+      "@type": "Offer",
+      "price": String(design.price_value || '').replace(/[^\d]/g, ''),
+      "priceCurrency": "PKR",
+      "availability": "https://schema.org/InStock",
+      "url": canonicalBase + design.url
+    }
+  };
+%>
+<%- include('partials/head', { shareImage, extraSchema }) %>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<%- include('partials/sprite') %>
+<%- include('partials/header') %>
+
+<main id="main">
+  <section class="section">
+    <div class="wrap">
+      <nav aria-label="Breadcrumb" style="font-size:.84rem;color:var(--ink-faint);margin-bottom:1.6rem">
+        <a href="/">Home</a> <span aria-hidden="true">›</span>
+        <a href="/portfolio">Portfolio</a>
+        <% if (design.category_slug) { %>
+          <span aria-hidden="true">›</span> <a href="/portfolio?category=<%= design.category_slug %>"><%= design.category_name %></a>
+        <% } %>
+      </nav>
+
+      <div class="split">
+        <div>
+          <div class="portrait" style="border-radius:var(--r-lg)">
+            <img src="<%= design.image_url %>"
+                 alt="<%= design.title %> — <%= design.category_name || 'mehndi' %> design by Colors with Kiran, <%= s['contact.area'] %> <%= s['contact.city'] %>"
+                 fetchpriority="high" width="<%= design.width || 1200 %>" height="<%= design.height || 1500 %>"
+                 style="aspect-ratio:auto">
+          </div>
+        </div>
+
+        <div>
+          <% if (design.category_name) { %>
+            <a class="kicker" href="/portfolio?category=<%= design.category_slug %>"><%= design.category_emoji %> <%= design.category_name %></a>
+          <% } %>
+          <h1 style="font-size:clamp(2rem,5vw,3rem);margin:.5rem 0 1rem"><%= design.title %></h1>
+
+          <div style="display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap;margin-bottom:1.3rem">
+            <span class="price" style="font-size:1.9rem"><%= design.price_label %></span>
+            <% if (design.price_type === 'starting') { %>
+              <span style="font-size:.8rem;color:var(--ink-faint)">starting price — varies with detail</span>
+            <% } %>
+          </div>
+
+          <% if (design.description) { %>
+            <div class="prose"><p><%= design.description %></p></div>
+          <% } %>
+
+          <div class="btn-row" style="margin-top:1.8rem">
+            <a class="btn btn--wa" href="<%= wa('I am interested in the "' + design.title + '" design' + (design.category_name ? ' (' + design.category_name + ')' : '') + '. Please share availability and the exact price.') %>" target="_blank" rel="noopener">
+              <svg aria-hidden="true"><use href="#i-wa"/></svg> Book This Design
+            </a>
+            <a class="btn btn--ghost" href="/contact?design=<%= encodeURIComponent(design.title) %>">Booking form</a>
+          </div>
+
+          <ul class="tick-list" style="margin-top:2rem">
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>Drawn freehand — no stencils or stickers</span></li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>Fresh, natural, chemical-free henna cones</span></li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>Can be scaled up or simplified to suit your budget</span></li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>Studio in <%= s['contact.area'] %> or home service across <%= s['contact.city'] %></span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <% if (related.length) { %>
+  <section class="section section--cream section--tight">
+    <div class="wrap">
+      <div class="head">
+        <span class="kicker">You may also like</span>
+        <h2 style="font-size:clamp(1.6rem,4vw,2.3rem)">More <%= design.category_name || 'designs' %></h2>
+      </div>
+      <div class="grid grid--auto">
+        <% related.forEach(d => { %><%- include('partials/card', { d }) %><% }) %>
+      </div>
+    </div>
+  </section>
+  <% } %>
+</main>
+<%- include('partials/footer') %>
+</body>
+</html>

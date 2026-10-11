@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><%- include('partials/head') %></head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<%- include('partials/sprite') %>
+<%- include('partials/header') %>
+
+<main id="main">
+  <%- include('partials/pagehead', {
+    kicker: 'Portfolio',
+    heading: 'Mehndi Designs',
+    text: 'Every design here was drawn freehand in ' + s['contact.area'] + ', ' + s['contact.city'] + '. Tap a category to filter, or tap any design to see the detail and starting price.'
+  }) %>
+
+  <div class="filter-bar">
+    <div class="wrap">
+      <div class="chips" role="tablist" aria-label="Filter designs by category">
+        <button class="chip <%= active === 'all' ? 'is-active' : '' %>" data-filter="all" role="tab" aria-selected="<%= active === 'all' %>">
+          All Designs <span class="chip__n"><%= designs.length %></span>
+        </button>
+        <% categories.filter(c => designs.some(d => d.category_slug === c.slug)).forEach(c => {
+             const n = designs.filter(d => d.category_slug === c.slug).length; %>
+          <button class="chip <%= active === c.slug ? 'is-active' : '' %>" data-filter="<%= c.slug %>" role="tab" aria-selected="<%= active === c.slug %>">
+            <span aria-hidden="true"><%= c.emoji %></span> <%= c.name %> <span class="chip__n"><%= n %></span>
+          </button>
+        <% }) %>
+      </div>
+    </div>
+  </div>
+
+  <section class="section" style="padding-top:0">
+    <div class="wrap">
+      <% if (designs.length) { %>
+        <div class="grid grid--auto" id="designGrid">
+          <% designs.forEach((d, i) => { %>
+            <div class="grid-item" data-category="<%= d.category_slug || 'uncategorised' %>">
+              <%- include('partials/card', { d, eager: i < 4 }) %>
+            </div>
+          <% }) %>
+        </div>
+        <p class="empty" id="noResults" hidden>
+          <svg aria-hidden="true"><use href="#i-image"/></svg>
+          No designs in this category yet — but I can absolutely draw one for you.
+          <br><a class="btn btn--primary btn--sm" style="margin-top:1rem" href="/contact">Request a custom design</a>
+        </p>
+      <% } else { %>
+        <div class="empty">
+          <svg aria-hidden="true"><use href="#i-image"/></svg>
+          <p>The portfolio is being updated. Please check back soon, or message me on WhatsApp to see recent work.</p>
+        </div>
+      <% } %>
+    </div>
+  </section>
+
+  <section class="section section--tight cta-band">
+    <div class="wrap">
+      <h2>Found a design you love?</h2>
+      <p>Send it to me on WhatsApp and I will confirm the price and your date.</p>
+      <div class="btn-row btn-row--center" style="margin-top:1.6rem">
+        <a class="btn btn--wa" href="<%= wa() %>" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg> Book on WhatsApp</a>
+        <a class="btn btn--light" href="/contact">Booking form</a>
+      </div>
+    </div>
+  </section>
+</main>
+<%- include('partials/footer') %>
+</body>
+</html>
