@@ -1,0 +1,17 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "env": {
+    "NODEJS_HELPERS": "0"
+  },
+  "functions": {
+    "api/index.js": {
+      "includeFiles": "views/**"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/((?!_vercel).*)",
+      "destination": "/api/index"
+    }
+  ]
+}

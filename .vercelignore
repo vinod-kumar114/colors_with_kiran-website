@@ -1,0 +1,7 @@
+# Keep the serverless bundle small. These are never needed in production:
+node_modules
+data
+public/uploads
+.env
+.git
+.vercel

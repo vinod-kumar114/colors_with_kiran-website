@@ -1,0 +1,36 @@
+{
+  "name": "colors-with-kiran",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch-path=./src --watch-path=./views --watch-path=./server.js server.js",
+    "build": "node scripts/build-check.js",
+    "vercel-build": "node scripts/build-check.js",
+    "seed": "node scripts/seed.js",
+    "migrate": "node scripts/migrate-to-cloud.js",
+    "check": "node check.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "Mehndi portfolio & booking website for Colors with Kiran, Qasimabad Hyderabad",
+  "type": "module",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "compression": "^1.8.2",
+    "cookie-parser": "^1.4.7",
+    "ejs": "^6.0.1",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.7.0",
+    "helmet": "^8.3.0",
+    "multer": "^2.4.0",
+    "@libsql/client": "^0.15.15"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "optionalDependencies": {
+    "sharp": "^0.35.5"
+  }
+}
