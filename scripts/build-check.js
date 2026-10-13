@@ -98,8 +98,18 @@ checks++;
 try {
   const vc = JSON.parse(fs.readFileSync(path.join(ROOT, 'vercel.json'), 'utf8'));
   if (!vc.rewrites?.length) bad('vercel.json has no rewrites — nothing would reach the app');
-  const inc = vc.functions?.['api/index.js']?.includeFiles || '';
-  if (!inc.includes('views')) {
+
+  let includesViews = false;
+  if (vc.functions) {
+    for (const key in vc.functions) {
+      if (vc.functions[key].includeFiles && vc.functions[key].includeFiles.includes('views')) {
+        includesViews = true;
+        break;
+      }
+    }
+  }
+
+  if (!includesViews) {
     bad('vercel.json must includeFiles "views/**", or page rendering fails in production');
   }
   ok('vercel.json is valid');

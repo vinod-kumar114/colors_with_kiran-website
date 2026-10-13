@@ -4,7 +4,16 @@
     "NODEJS_HELPERS": "0"
   },
   "functions": {
-    "api/index.js": {
+    "api/**/*.js": {
+      "includeFiles": "views/**"
+    },
+    "api/**/*.mjs": {
+      "includeFiles": "views/**"
+    },
+    "src/**/*.js": {
+      "includeFiles": "views/**"
+    },
+    "src/**/*.mjs": {
       "includeFiles": "views/**"
     }
   },
