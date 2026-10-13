@@ -106,6 +106,11 @@ async function putLocal(buffer) {
 
   const name = `${crypto.randomBytes(10).toString('hex')}.webp`;
 
+  if (IS_SERVERLESS) {
+    console.log('Skipping image write in serverless read-only mode:', name);
+    return { image: name, thumb: name, width: meta.width || 800, height: meta.height || 800 };
+  }
+
   const fullInfo = await base
     .clone()
     .resize({ width: 1600, height: 1600, fit: 'inside', withoutEnlargement: true })

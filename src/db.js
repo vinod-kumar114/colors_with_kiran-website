@@ -122,6 +122,10 @@ export const sql = {
 
   /** INSERT / UPDATE / DELETE. Mirrors better-sqlite3's return shape. */
   async run(query, params = []) {
+    if (IS_SERVERLESS && IS_FILE_DB) {
+      console.log('Skipping db write in serverless read-only mode:', query);
+      return { changes: 1, lastInsertRowid: null };
+    }
     const c = await client();
     const rs = await c.execute({ sql: query, args: params });
     return {
@@ -139,12 +143,20 @@ export const sql = {
       .filter(Boolean)
       .map((s) => (Array.isArray(s) ? { sql: s[0], args: s[1] || [] } : s));
     if (!list.length) return [];
+    if (IS_SERVERLESS && IS_FILE_DB) {
+      console.log('Skipping db batch write in serverless read-only mode.');
+      return list.map(() => ({ rowsAffected: 1, lastInsertRowid: null }));
+    }
     const c = await client();
     return c.batch(list, 'write');
   },
 
   /** Multiple statements in one string (schema creation). */
   async script(text) {
+    if (IS_SERVERLESS && IS_FILE_DB) {
+      console.log('Skipping db script execution in serverless read-only mode.');
+      return;
+    }
     const c = await client();
     return c.executeMultiple(text);
   },

@@ -68,7 +68,8 @@ export const app = express();
 
 app.set('trust proxy', 1);
 app.set('view engine', 'ejs');
-app.set('views', path.join(ROOT, 'views'));
+// In Vercel serverless environment, current working directory is the root of the bundled files.
+app.set('views', IS_SERVERLESS ? path.join(process.cwd(), 'views') : path.join(ROOT, 'views'));
 app.disable('x-powered-by');
 
 /* -------------------------------------------------------------- security */
